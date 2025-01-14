@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     Vector2 boxExtents;
@@ -11,6 +13,10 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 8.0f;
     public float airControlForce = 10.0f;
     public float airControlMax = 1.5f;
+    public TextMeshProUGUI uiText;
+int totalCoins;
+int coinsCollected;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +24,8 @@ public class PlayerController : MonoBehaviour
         //get the extent of the collison box
         boxExtents = GetComponent<BoxCollider2D>().bounds.extents;
         animator = GetComponent<Animator>();
+        coinsCollected = 0;
+        totalCoins = GameObject.FindGameObjectsWithTag("Coin").Length;
     }
 
     // Update is called once per frame
@@ -30,7 +38,7 @@ public class PlayerController : MonoBehaviour
     animator.SetFloat("xspeed", xSpeed);
      float ySpeed = rigidBody.velocity.y;
  animator.SetFloat("yspeed", ySpeed);
-
+ // find out how many coins in the level
 } 
    
  
@@ -59,6 +67,9 @@ public class PlayerController : MonoBehaviour
             if (h * vx < airControlMax)
                 rigidBody.AddForce(new Vector2(h * airControlForce, 0));
         }
+        string uiString = "x " + coinsCollected + "/" + totalCoins;
+uiText.text = uiString;
+
     }
     void OnTriggerEnter2D( Collider2D coll )
 {
@@ -66,6 +77,15 @@ public class PlayerController : MonoBehaviour
  {
  Destroy(coll.gameObject);
    coinSound.Play();
+   coinsCollected++;
  }
 } 
+void OnCollisionEnter2D( Collision2D coll)
+{
+ if ( coll.gameObject.tag == "Death" )
+ {
+ SceneManager.LoadScene(0);
+ }
+}
+
 }
