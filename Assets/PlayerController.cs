@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour
 {
     Vector2 boxExtents;
     Rigidbody2D rigidBody;
+    Animator animator;
     public float speed = 5.0f;
     public float jumpForce = 8.0f;
     public float airControlForce = 10.0f;
@@ -15,13 +16,22 @@ public class PlayerController : MonoBehaviour
         rigidBody = GetComponent<Rigidbody2D>();
         //get the extent of the collison box
         boxExtents = GetComponent<BoxCollider2D>().bounds.extents;
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
-    void Update()
-    {
-
-    }
+    void Update ()
+{
+ if (rigidBody.velocity.x*transform.localScale.x < 0.0f)
+    transform.localScale = new Vector3(-transform.localScale.x,
+    transform.localScale.y, transform.localScale.z);
+    float xSpeed = Mathf.Abs(rigidBody.velocity.x);
+    animator.SetFloat("xspeed", xSpeed);
+     float ySpeed = rigidBody.velocity.y;
+ animator.SetFloat("yspeed", ySpeed);
+} 
+   
+ 
 
     void FixedUpdate()
     {
