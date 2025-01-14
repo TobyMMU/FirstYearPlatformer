@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
     Vector2 boxExtents;
     Rigidbody2D rigidBody;
     Animator animator;
+    public AudioSource coinSound;
     public float speed = 5.0f;
     public float jumpForce = 8.0f;
     public float airControlForce = 10.0f;
@@ -29,6 +30,7 @@ public class PlayerController : MonoBehaviour
     animator.SetFloat("xspeed", xSpeed);
      float ySpeed = rigidBody.velocity.y;
  animator.SetFloat("yspeed", ySpeed);
+
 } 
    
  
@@ -58,4 +60,12 @@ public class PlayerController : MonoBehaviour
                 rigidBody.AddForce(new Vector2(h * airControlForce, 0));
         }
     }
+    void OnTriggerEnter2D( Collider2D coll )
+{
+ if ( coll.gameObject.tag == "Coin")
+ {
+ Destroy(coll.gameObject);
+   coinSound.Play();
+ }
+} 
 }
